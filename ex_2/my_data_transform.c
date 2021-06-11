@@ -33,7 +33,7 @@ typedef struct s_order
     char* city;
     char* device;
     char* coffee_quantity;
-    char* orderAt;    
+    char* orderAt;
 } order;
 #endif
 
@@ -71,7 +71,7 @@ void check_group(order** orders,int size){
             ord->age = group;
             break;
         case 66 ... 99:
-            group = "66->99";        
+            group = "66->99";
             ord->age = group;
             break;
         default:
@@ -128,17 +128,16 @@ void check_order_time(order** orders,int size){
 
 string_array* my_data_transform(char* param_1)
 {
+  
     int size = count_char(param_1,'\n');
     int line_index = 0;
     order* order_list[size+1];
 
     while(*param_1 != 0){
         
-
-
         order* decoupled_order = malloc(sizeof(order)*sizeof(char*));
 
-        int index = 0;        
+        int index = 0;
         while (*param_1 != '\n'){
 
             char* current_word = (char*)malloc(50);
@@ -148,7 +147,7 @@ string_array* my_data_transform(char* param_1)
                 *current_word = *param_1;
                 current_word++;
                 param_1++;
-            }      
+            }
             *current_word = 0;
             switch (index)
             {
@@ -198,10 +197,10 @@ string_array* my_data_transform(char* param_1)
             index++;
             current_word++;
             if (*param_1 != '\n'){
-                param_1++; 
+                param_1++;
             } else {
                 order_list[line_index] = decoupled_order;
-                line_index++; 
+                line_index++;
             }
         }
         param_1++;
@@ -214,7 +213,8 @@ string_array* my_data_transform(char* param_1)
     char** converted = (char**)malloc(((size+1) * sizeof(char*)));
     for (int i = 0; i < size; i++){
         order* transformed_order = order_list[i];
-        char* word = malloc(400);
+        char* word = malloc(200);
+        memset(word, 0, 200);
         char* save = word;
         strcat(word,transformed_order->gender);
         //free(transformed_order->gender);
@@ -223,28 +223,28 @@ string_array* my_data_transform(char* param_1)
         //free(transformed_order->first_name);
         strcat(word,",");
         strcat(word,transformed_order->last_name);
-        //free(transformed_order->last_name);        
+        //free(transformed_order->last_name);
         strcat(word,",");
         strcat(word,transformed_order->user_name);
-        //free(transformed_order->user_name);                
+        //free(transformed_order->user_name);
         strcat(word,",");
         strcat(word,transformed_order->email);
-        //free(transformed_order->email);                       
+        //free(transformed_order->email);
         strcat(word,",");
         strcat(word,transformed_order->age);
-        //free(transformed_order->age);     
+        //free(transformed_order->age);
         strcat(word,",");
         strcat(word,transformed_order->city);
-        //free(transformed_order->city);     
+        //free(transformed_order->city);
         strcat(word,",");
         strcat(word,transformed_order->device);
-        //free(transformed_order->device);     
+        //free(transformed_order->device);
         strcat(word,",");
         strcat(word,transformed_order->coffee_quantity);
-        //free(transformed_order->coffee_quantity);     
+        //free(transformed_order->coffee_quantity);
         strcat(word,",");
         strcat(word,transformed_order->orderAt);
-        //free(transformed_order->orderAt);     
+        //free(transformed_order->orderAt);
         converted[i] = save;
     }
     converted[size] = 0;
@@ -254,6 +254,11 @@ string_array* my_data_transform(char* param_1)
     str->array = converted;
     return str;
 }
+
+
+
+
+
 
 
 int main(){
