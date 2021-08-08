@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/marcel.ghisi/Projects/ELU/S2/CLion/main.c
+my_lslib.h
+/Users/marcel.ghisi/Projects/ELU/S2/CLion/my_lslib.h
+
+/Users/marcel.ghisi/Projects/ELU/S2/CLion/my_lslib.c
+my_lslib.h
+/Users/marcel.ghisi/Projects/ELU/S2/CLion/my_lslib.h
+
+/Users/marcel.ghisi/Projects/ELU/S2/CLion/my_lslib.h
+math.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+stdbool.h
+-
+sys/types.h
+-
+sys/stat.h
+-
+unistd.h
+-
+limits.h
+-
+dirent.h
+-
+string.h
+-
+time.h
+-
+sys/ioctl.h
+-
+unistd.h
+-
+
