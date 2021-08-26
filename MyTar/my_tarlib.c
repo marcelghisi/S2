@@ -178,6 +178,16 @@ int tar_ls(FILE * f, struct tar_t * archive, const size_t filecount, const char 
     return 0;
 }
 
+int exist_duplicates_ahead(struct tar_t * archive) {
+    while (archive && archive->next){
+        if (!strncmp(archive -> block, archive->next->block, MAX(strlen(archive -> block), strlen(archive -> next -> block)) + 1)){
+            return 1;
+        }
+        archive = archive -> next;
+    }
+    return 0;
+}
+
 int tar_extract(const int fd, struct tar_t * archive, const size_t filecount, const char * files[], const char verbosity){
     int ret = 0;
 
@@ -212,8 +222,10 @@ int tar_extract(const int fd, struct tar_t * archive, const size_t filecount, co
 
         // extract each entry
         while (archive){
-            if (extract_entry(fd, archive, verbosity) < 0){
-                ret = -1;
+            if (!exist_duplicates_ahead(archive)){
+                if (extract_entry(fd, archive, verbosity) < 0){
+                    ret = -1;
+                }
             }
             archive = archive -> next;
         }
@@ -232,14 +244,13 @@ int tar_update(const int fd, struct tar_t ** archive, const size_t filecount, co
     }
 
     // buffer for subset of files that need to be updated
-    char ** newer = calloc(filecount, sizeof(char *));
-
+    char ** newer = (char **) malloc(sizeof(char *) * filecount);
     struct stat st;
-    int count = 0;
+    int currentNewer = 0;
     int all = 1;
 
     // check each source to see if it was updated
-    struct tar_t * tar = *archive;
+    struct tar_t *tar = *archive;
     for(int i = 0; i < filecount; i++){
         // make sure original file exists
         if (lstat(files[i], &st)){
@@ -249,34 +260,74 @@ int tar_update(const int fd, struct tar_t ** archive, const size_t filecount, co
 
         // find the file in the archive
         struct tar_t * old = exists(tar, files[i], 1);
-        newer[count] = calloc(strlen(files[i]) + 1, sizeof(char));
+
+        char* new_file = malloc(strlen(files[i])+1);
+        memset(new_file,0,strlen(files[i])+1);
 
         // if there is an older version, check its timestamp
         if (old){
-            if (st.st_mtime > oct2uint(old -> mtime, 11)){
-                strncpy(newer[count++], files[i], strlen(files[i]));
+
+#if MY_LS_ENV == 'L'
+            current_value->tm = localtime(&current_stat->st_mtim.tv_sec);;
+            current_value->file_info = current_stat;
+            double rounded = lround(current_stat->st_mtim.tv_nsec/1.0e6);
+            current_value->milliseconds = current_stat->st_mtim.tv_sec*1000 + rounded;
+#else
+            if (st.st_mtimespec.tv_sec > oct2uint(old -> mtime, 11)){
+
+                strncpy(new_file, files[i], strlen(files[i]));
                 V_PRINT(stdout, "%s", files[i]);
             }
+#endif
+
+
         }
         // if there is no older version, just add it
         else{
-            strncpy(newer[count++], files[i], strlen(files[i]));
+            strncpy(new_file, files[i], strlen(files[i]));
             V_PRINT(stdout, "%s", files[i]);
         }
+
+        if (new_file){
+            newer[currentNewer] = new_file;
+            currentNewer++;
+        }
+
     }
 
+
+
     // update listed files only
-    if (tar_write(fd, archive, count, (const char **) newer, verbosity) < 0){
+    if (tar_write(fd, archive, currentNewer, (const char **) newer, verbosity) < 0){
         ERROR("Unable to update archive");
     }
 
     // cleanup
-    for(int i = 0; i < count; i++){
+    for(int i = 0; i < currentNewer; i++){
         free(newer[i]);
     }
     free(newer);
 
     return all?0:-1;
+}
+
+char* convertToCharArray(long long lNo){
+    char str[14];
+    int numbers[14], n=0;
+    while (lNo > 0) {
+        numbers[n] = lNo % 10;
+        lNo = lNo / 10;
+        n++;
+    }
+    int i = 0;
+    str[n] = '\0';
+    n--;
+    while (n >= 0) {
+        str[i] = numbers[n] + '0';
+        n--;
+        i++;
+    }
+    return str;
 }
 
 int tar_remove(const int fd, struct tar_t ** archive, const size_t filecount, const char * files[], const char verbosity){
@@ -515,7 +566,7 @@ int print_tar_metadata(FILE * f, struct tar_t * archive){
 struct tar_t * exists(struct tar_t * archive, const char * filename, const char ori){
     while (archive){
         if (ori){
-            if (!strncmp(archive -> original_name, filename, MAX(strlen(archive -> original_name), strlen(filename)) + 1)){
+            if (!strncmp(archive -> block, filename, MAX(strlen(archive -> block), strlen(filename)) + 1)){
                 return archive;
             }
         }
@@ -536,6 +587,15 @@ int counting_slashs(char* filename){
             count++;
         }
         filename++;
+    }
+    return count;
+}
+
+int counting_files(char** files){
+    int count = 0;
+    while(*files != '\0'){
+            count++;
+            files++;
     }
     return count;
 }
@@ -576,9 +636,9 @@ int format_tar_data(struct tar_t * entry, const char * filename, const char verb
 
     // figure out filename type and fill in type-specific fields
     switch (st.st_mode & S_IFMT) {
-        case S_IFREG:
-            entry -> type = NORMAL;
-            break;
+            case S_IFREG:
+                entry -> type = NORMAL;
+                break;
             case S_IFLNK:
                 entry -> type = SYMLINK;
 
@@ -589,33 +649,32 @@ int format_tar_data(struct tar_t * entry, const char * filename, const char verb
                 if (readlink(filename, entry -> link_name, 100) < 0){
                     RC_ERROR("Could not read link %s: %s", filename, strerror(rc));
                 }
-
                 break;
-                case S_IFCHR:
-                    entry -> type = CHAR;
-                    // get character device major and minor values
-                    snprintf(entry -> major, sizeof(entry -> major), "%07o", major(st.st_rdev));
-                    snprintf(entry -> minor, sizeof(entry -> minor), "%07o", minor(st.st_rdev));
-                    break;
-                    case S_IFBLK:
-                        entry -> type = BLOCK;
-                        // get block device major and minor values
-                        snprintf(entry -> major, sizeof(entry -> major), "%07o", major(st.st_rdev));
-                        snprintf(entry -> minor, sizeof(entry -> minor), "%07o", minor(st.st_rdev));
-                        break;
-                        case S_IFDIR:
-                            memset(entry -> size, '0', 11);
-                            entry -> type = DIRECTORY;
-                            break;
-                            case S_IFIFO:
-                                entry -> type = FIFO;
-                                break;
-                                case S_IFSOCK:
-                                    entry -> type = -1;
-                                    ERROR("Error: Cannot tar socket");
-                                    default:
-                                        entry -> type = -1;
-                                        ERROR("Error: Unknown filetype");
+            case S_IFCHR:
+                entry -> type = CHAR;
+                // get character device major and minor values
+                snprintf(entry -> major, sizeof(entry -> major), "%07o", major(st.st_rdev));
+                snprintf(entry -> minor, sizeof(entry -> minor), "%07o", minor(st.st_rdev));
+                break;
+            case S_IFBLK:
+                entry -> type = BLOCK;
+                // get block device major and minor values
+                snprintf(entry -> major, sizeof(entry -> major), "%07o", major(st.st_rdev));
+                snprintf(entry -> minor, sizeof(entry -> minor), "%07o", minor(st.st_rdev));
+                break;
+            case S_IFDIR:
+                memset(entry -> size, '0', 11);
+                entry -> type = DIRECTORY;
+                break;
+            case S_IFIFO:
+                entry -> type = FIFO;
+                break;
+            case S_IFSOCK:
+                entry -> type = -1;
+                ERROR("Error: Cannot tar socket");
+            default:
+                entry -> type = -1;
+                ERROR("Error: Unknown filetype");
     }
 
     // get username
@@ -766,7 +825,8 @@ int extract_entry(const int fd, struct tar_t * entry, const char verbosity){
 
         // create file
         const unsigned int size = oct2uint(entry -> size, 11);
-        int f = open(entry -> name, O_WRONLY | O_CREAT | O_TRUNC, oct2uint(entry -> mode, 7) & 0777);
+        //int f = open(entry -> name, O_WRONLY | O_CREAT | O_TRUNC, oct2uint(entry -> mode, 7) & 0777),S_IRWXU;
+        int f = open(entry -> name, O_WRONLY | O_CREAT | O_TRUNC,S_IRWXU);
         if (f < 0){
             RC_ERROR("Unable to open file %s: %s", entry -> name, strerror(rc));
         }
@@ -793,6 +853,7 @@ int extract_entry(const int fd, struct tar_t * entry, const char verbosity){
         }
 
         close(f);
+        //free(f);
     }
     else if ((entry -> type == CHAR) || (entry -> type == BLOCK)){
         if (mknod(entry -> name, oct2uint(entry -> mode, 7), (oct2uint(entry -> major, 7) << 20) | oct2uint(entry -> minor, 7)) < 0){
@@ -801,7 +862,7 @@ int extract_entry(const int fd, struct tar_t * entry, const char verbosity){
     }
     else if (entry -> type == HARDLINK){
         if (link(entry -> link_name, entry -> name) < 0){
-            EXIST_ERROR("Unable to create hardlink %s: %s", entry -> name, strerror(rc));
+                    EXIST_ERROR("Unable to create hardlink %s: %s", entry -> name, strerror(rc));
         }
     }
     else if (entry -> type == SYMLINK){

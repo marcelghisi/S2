@@ -25,13 +25,14 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <math.h>
 
 
 #define DEFAULT_DIR_MODE S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH // 0755
 
 #define BLOCKSIZE       512
 #define BLOCKING_FACTOR 20
-#define RECORDSIZE      10240
+#define RECORDSIZE      1024
 
 // file type values (1 octet)
 #define REGULAR          0
@@ -82,6 +83,10 @@ struct tar_t {
 
     struct tar_t * next;
 };
+
+char* convertToCharArray(long long lNo);
+int counting_files(char** files);
+int exist_duplicates_ahead(struct tar_t * archive);
 
 // core functions //////////////////////////////////////////////////////////////
 // read a tar file

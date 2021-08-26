@@ -6,9 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/marcel.ghisi/Projects/ELU/S2/MyTar/main.c
-stdio.h
--
+/Users/marcel.ghisi/Projects/ELU/S2/MyTar/my_tarlib.c
 my_tarlib.h
 /Users/marcel.ghisi/Projects/ELU/S2/MyTar/my_tarlib.h
 
@@ -44,5 +42,7 @@ sys/time.h
 sys/types.h
 -
 unistd.h
+-
+math.h
 -
 
