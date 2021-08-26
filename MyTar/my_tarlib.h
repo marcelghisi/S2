@@ -84,8 +84,8 @@ struct tar_t {
     struct tar_t * next;
 };
 
-char* convertToCharArray(long long lNo);
-int counting_files(char** files);
+
+int counting_files(const char** files);
 int exist_duplicates_ahead(struct tar_t * archive);
 
 // core functions //////////////////////////////////////////////////////////////

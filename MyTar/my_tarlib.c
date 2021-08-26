@@ -222,11 +222,11 @@ int tar_extract(const int fd, struct tar_t * archive, const size_t filecount, co
 
         // extract each entry
         while (archive){
-            if (!exist_duplicates_ahead(archive)){
+            //if (!exist_duplicates_ahead(archive)){
                 if (extract_entry(fd, archive, verbosity) < 0){
                     ret = -1;
                 }
-            }
+            //}
             archive = archive -> next;
         }
     }
@@ -309,25 +309,6 @@ int tar_update(const int fd, struct tar_t ** archive, const size_t filecount, co
     free(newer);
 
     return all?0:-1;
-}
-
-char* convertToCharArray(long long lNo){
-    char str[14];
-    int numbers[14], n=0;
-    while (lNo > 0) {
-        numbers[n] = lNo % 10;
-        lNo = lNo / 10;
-        n++;
-    }
-    int i = 0;
-    str[n] = '\0';
-    n--;
-    while (n >= 0) {
-        str[i] = numbers[n] + '0';
-        n--;
-        i++;
-    }
-    return str;
 }
 
 int tar_remove(const int fd, struct tar_t ** archive, const size_t filecount, const char * files[], const char verbosity){
@@ -580,7 +561,7 @@ struct tar_t * exists(struct tar_t * archive, const char * filename, const char 
     return NULL;
 }
 
-int counting_slashs(char* filename){
+int counting_slashs(const char* filename){
     int count = 0;
     while(*filename != '\0'){
         if (*filename == '/'){
@@ -591,9 +572,9 @@ int counting_slashs(char* filename){
     return count;
 }
 
-int counting_files(char** files){
+int counting_files(const char** files){
     int count = 0;
-    while(*files != '\0'){
+    while(*files){
             count++;
             files++;
     }
@@ -975,26 +956,26 @@ int write_entries(const int fd, struct tar_t ** archive, struct tar_t ** head, c
         else{ // if (((*tar) -> type == REGULAR) || ((*tar) -> type == NORMAL) || ((*tar) -> type == CONTIGUOUS) || ((*tar) -> type == SYMLINK) || ((*tar) -> type == CHAR) || ((*tar) -> type == BLOCK) || ((*tar) -> type == FIFO)){
             V_PRINT(stdout, "Writing %s", (*tar) -> name);
 
-            char tarred = 0;   // whether or not the file has already been put into the archive
-            if (((*tar) -> type == REGULAR) || ((*tar) -> type == NORMAL) || ((*tar) -> type == CONTIGUOUS) || ((*tar) -> type == SYMLINK)){
-                struct tar_t * found = exists(*head, files[i], 1);
-                tarred = (found != (*tar));
+            //char tarred = 0;   // whether or not the file has already been put into the archive
+            //if (((*tar) -> type == REGULAR) || ((*tar) -> type == NORMAL) || ((*tar) -> type == CONTIGUOUS) || ((*tar) -> type == SYMLINK)){
+            //    struct tar_t * found = exists(*head, files[i], 1);
+            //    tarred = (found != (*tar));
 
-                // if file has already been included, modify the header
-                if (tarred){
+            //    // if file has already been included, modify the header
+            //    if (tarred){
                     // change type to hard link
-                    (*tar) -> type = HARDLINK;
+                    (*tar) -> type = REGULAR;
 
-                    // change link name to (*tar)red file name (both are the same)
-                    strncpy((*tar) -> link_name, (*tar) -> name, 100);
-
+            //        // change link name to (*tar)red file name (both are the same)
+            //        strncpy((*tar) -> link_name, (*tar) -> name, 100);
+            //
                     // change size to 0
-                    memset((*tar) -> size, '0', sizeof((*tar) -> size) - 1);
+            //        memset((*tar) -> size, '0', sizeof((*tar) -> size) - 1);
 
                     // recalculate checksum
-                    calculate_checksum(*tar);
-                }
-            }
+            //        calculate_checksum(*tar);
+            //    }
+            //}
 
             // write metadata to (*tar) file
             if (write_size(fd, (*tar) -> block, 512) != 512){
@@ -1003,7 +984,7 @@ int write_entries(const int fd, struct tar_t ** archive, struct tar_t ** head, c
 
             if (((*tar) -> type == REGULAR) || ((*tar) -> type == NORMAL) || ((*tar) -> type == CONTIGUOUS)){
                 // if the file isn't already in the tar file, copy the contents in
-                if (!tarred){
+                //Marcelif (!tarred){
                     int f = open((*tar) -> name, O_RDONLY);
                     if (f < 0){
                         WRITE_ERROR("Could not open %s", files[i]);
@@ -1018,7 +999,7 @@ int write_entries(const int fd, struct tar_t ** archive, struct tar_t ** head, c
                     }
 
                     close(f);
-                }
+                //Marcel}
             }
 
             // pad data to fill block
