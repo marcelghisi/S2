@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_shape/shape.c
+stdint.h
+-
+assert.h
+-
+shape.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_shape/shape.h
+stdio.h
+-
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_shape/shape.h
+stdint.h
+-
+

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="my_bc_py"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="my_bc_py">
+				<Option output="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/my_bc_py" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 my_bc_py"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="my_bc_py/fast">
+				<Option output="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/my_bc_py" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 my_bc_py/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/main.c">
+			<Option target="my_bc_py"/>
+		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_lexer.c">
+			<Option target="my_bc_py"/>
+		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_lexer.h">
+			<Option target="my_bc_py"/>
+		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_token.c">
+			<Option target="my_bc_py"/>
+		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_token.h">
+			<Option target="my_bc_py"/>
+		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

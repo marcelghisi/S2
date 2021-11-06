@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_blockchain/functions_structures.h
+unistd.h
+-
+stdio.h
+-
+stdlib.h
+-
+fcntl.h
+-
+stdbool.h
+-
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_blockchain/run_functions.c
+functions_structures.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_blockchain/functions_structures.h
+run_functions.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_blockchain/run_functions.h
+stdlib.h
+-
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_blockchain/run_functions.h
+

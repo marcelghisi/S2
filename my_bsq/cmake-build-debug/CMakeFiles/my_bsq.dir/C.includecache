@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bsq/New.h
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bsq/Object.h
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bsq/Set.h
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bsq/main.c
+stdio.h
+-
+New.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bsq/New.h
+Object.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bsq/Object.h
+Set.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bsq/Set.h
+

@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/main.c
+stdio.h
+-
+my_token.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_token.h
+my_lexer.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_lexer.h
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_lexer.h
+my_token.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_token.h
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_token.h
+stdio.h
+-
+

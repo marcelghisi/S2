@@ -13,50 +13,49 @@ int main(int argc, char * argv[]){
     if (((argc == 2) && (strncmp(argv[1], "help", MAX(strlen(argv[1]), 4)))) || (argc < 3)){
         //fprintf(stderr, "Usage: %s option(s) tarfile [sources]\n", argv[0]);
         //fprintf(stderr, "Usage: %s help\n", argv[0]);
-       // return -1;
-       fprintf(stdout, "Usage: %s options(s) tarfile [sources]\n"\
-       "Usage: %s help\n"\
-       "\n"\
-       "    options (only one allowed at a time):\n"\
-       "        -r - append files to archive\n"\
-       "        -c - create a new archive\n"\
-       "        -t - list archive contents to stdout\n"\
-       "        -u - update just modified files\n"\
-       "        -x - extract to disk from the archive\n"\
-       "\n"\
-       "    other options:\n"\
-       "        v - make operation verbose\n"\
-       "        f - get tar name from second argument instead default\n"\
-       "\n"\
-       "Ex: %s vl archive.tar\n"\
-       , argv[0], argv[0], argv[0]);
-       return 0;
+        // return -1;
+        fprintf(stdout, "Usage: %s options(s) tarfile [sources]\n"\
+        "Usage: %s help\n"\
+        "\n"\
+        "    options (only one allowed at a time):\n"\
+        "        -r - append files to archive\n"\
+        "        -c - create a new archive\n"\
+        "        -t - list archive contents to stdout\n"\
+        "        -u - update just modified files\n"\
+        "        -x - extract to disk from the archive\n"\
+        "\n"\
+        "    other options:\n"\
+        "        v - make operation verbose\n"\
+        "        f - get tar name from second argument instead default\n"\
+        "\n"\
+        "Ex: %s vl archive.tar\n"\
+        , argv[0], argv[0], argv[0]);
+        return 0;
     }
 
     if (argc == 2){
         fprintf(stdout, "Usage: %s options(s) tarfile [sources]\n"\
         "Usage: %s help\n"\
         "\n"\
-                        "    options (only one allowed at a time):\n"\
-                        "        -r - append files to archive\n"\
-                        "        -c - create a new archive\n"\
-                        "        -t - list archive contents to stdout\n"\
-                        "        -u - update just modified files\n"\
-                        "        -x - extract to disk from the archive\n"\
-                        "\n"\
-                        "    other options:\n"\
-                        "        v - make operation verbose\n"\
-                        "        f - get tar name from second argument instead default\n"\
-                        "\n"\
-                        "Ex: %s vl archive.tar\n"\
-                        , argv[0], argv[0], argv[0]);
-                        return 0;
+        "    options (only one allowed at a time):\n"\
+        "        -r - append files to archive\n"\
+        "        -c - create a new archive\n"\
+        "        -t - list archive contents to stdout\n"\
+        "        -u - update just modified files\n"\
+        "        -x - extract to disk from the archive\n"\
+        "\n"\
+        "    other options:\n"\
+        "        v - make operation verbose\n"\
+        "        f - get tar name from second argument instead default\n"\
+        "\n"\
+        "Ex: %s vl archive.tar\n"\
+        , argv[0], argv[0], argv[0]);
+        return 0;
     }
 
     argc -= 3;
 
-    int rc = 0;
-    char a = 0,             // append
+    int rc,c,r,t,u,x = 0;
     c = 0,             // create
     r = 0,             // append
     t = 0,             // list

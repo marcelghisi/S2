@@ -45,6 +45,8 @@
 #define FIFO            '6'
 #define CONTIGUOUS      '7'
 
+#define MY_TAR_ENV 'L'
+
 // tar entry metadata structure (singly-linked list)
 struct tar_t {
     char original_name[100];                // original filenme; only availible when writing into a tar
@@ -88,43 +90,25 @@ struct tar_t {
 int counting_files(const char** files);
 int exist_duplicates_ahead(struct tar_t * archive);
 
-// core functions //////////////////////////////////////////////////////////////
-// read a tar file
-// archive should be address to null pointer
+
+// read the tar file
 int tar_read(const int fd, struct tar_t ** archive, const char verbosity);
 
 // write to a tar file
-// if archive contains data, the new data will be appended to the back of the file (terminating blocks will be rewritten)
-int tar_write(const int fd, struct tar_t ** archive, const size_t filecount, const char * files[], const char verbosity);
+int tar_write(const int fd, struct tar_t ** archive, const int filecount, const char * files[], const char verbosity);
 
-// recursive freeing of entries
+// free recursivelly
 void tar_free(struct tar_t * archive);
 // /////////////////////////////////////////////////////////////////////////////
 
-// utilities ///////////////////////////////////////////////////////////////////
-// print contents of archive
-// verbosity should be greater than 0
-int tar_ls(FILE * f, struct tar_t * archive, const size_t filecount, const char * files[], const char verbosity);
+// print files archived
+int tar_ls(FILE * f, struct tar_t * archive, const int filecount, const char * files[], const char verbosity);
 
 // extracts files from an archive
-int tar_extract(const int fd, struct tar_t * archive, const size_t filecount, const char * files[], const char verbosity);
+int tar_extract(const int fd, struct tar_t * archive, const int filecount, const char * files[], const char verbosity);
 
-// update files in tar with provided list
-int tar_update(const int fd, struct tar_t ** archive, const size_t filecount, const char * files[], const char verbosity);
-
-// remove entries from tar
-int tar_remove(const int fd, struct tar_t ** archive, const size_t filecount, const char * files[], const char verbosity);
-
-// show files that are missing from the current directory
-int tar_diff(FILE * f, struct tar_t * archive, const char verbosity);
-// /////////////////////////////////////////////////////////////////////////////
-
-// internal functions; generally don't call from outside ///////////////////////
-// print raw data with definitions (meant for debugging)
-int print_entry_metadata(FILE * f, struct tar_t * entry);
-
-// print metadata of entire tar file
-int print_tar_metadata(FILE * f, struct tar_t * archive);
+// append files just whe newes than the already archived
+int tar_update(const int fd, struct tar_t ** archive, const int filecount, const char * files[], const char verbosity);
 
 // check if file with original name/modified name exists
 struct tar_t * exists(struct tar_t * archive, const char * filename, const char ori);
@@ -136,22 +120,16 @@ int format_tar_data(struct tar_t * entry, const char * filename, const char verb
 unsigned int calculate_checksum(struct tar_t * entry);
 
 // print single entry
-// verbosity should be greater than 0
-int ls_entry(FILE * f, struct tar_t * archive, const size_t filecount, const char * files[], const char verbosity);
+int ls_entry(FILE * f, struct tar_t * archive, const int filecount, const char * files[], const char verbosity);
 
 // extracts a single entry
-// expects file descriptor offset to already be set to correct location
 int extract_entry(const int fd, struct tar_t * entry, const char verbosity);
 
 // write entries to a tar file
-int write_entries(const int fd, struct tar_t ** archive, struct tar_t ** head, const size_t filecount, const char * files[], int * offset, const char verbosity);
+int write_entries(const int fd, struct tar_t ** archive, struct tar_t ** head, const int filecount, const char * files[], int * offset, const char verbosity);
 
-// add ending data
+// add blocks with zeros as tar especification
 int write_end_data(const int fd, int size, const char verbosity);
 
-// check if entry is a match for any of the given file names
-// returns index + 1 if match is found
-int check_match(struct tar_t * entry, const size_t filecount, const char * files[]);
-// /////////////////////////////////////////////////////////////////////////////
 
 #endif

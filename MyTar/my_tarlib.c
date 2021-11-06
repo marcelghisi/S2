@@ -24,7 +24,7 @@ static unsigned int oct2uint(char * oct, unsigned int size);
 static int iszeroed(char * buf, size_t size);
 
 // make directory recursively
-static int recursive_mkdir(const char * dir, const unsigned int mode, const char verbosity);
+static int recursive_mkdir(const char * dir, const unsigned int mode);
 
 int tar_read(const int fd, struct tar_t ** archive, const char verbosity){
     if (fd < 0){
@@ -98,7 +98,7 @@ int tar_read(const int fd, struct tar_t ** archive, const char verbosity){
     return count;
 }
 
-int tar_write(const int fd, struct tar_t ** archive, const size_t filecount, const char * files[], const char verbosity){
+int tar_write(const int fd, struct tar_t ** archive, const int filecount, const char * files[], const char verbosity){
     if (fd < 0){
         ERROR("Bad file descriptor");
     }
@@ -159,7 +159,7 @@ void tar_free(struct tar_t * archive){
     }
 }
 
-int tar_ls(FILE * f, struct tar_t * archive, const size_t filecount, const char * files[], const char verbosity){
+int tar_ls(FILE * f, struct tar_t * archive, const int filecount, const char * files[], const char verbosity){
     if (!verbosity){
         return 0;
     }
@@ -188,7 +188,7 @@ int exist_duplicates_ahead(struct tar_t * archive) {
     return 0;
 }
 
-int tar_extract(const int fd, struct tar_t * archive, const size_t filecount, const char * files[], const char verbosity){
+int tar_extract(const int fd, struct tar_t * archive, const int filecount, const char * files[], const char verbosity){
     int ret = 0;
 
     // extract entries with given names
@@ -198,7 +198,7 @@ int tar_extract(const int fd, struct tar_t * archive, const size_t filecount, co
         }
 
         while (archive){
-            for(size_t i = 0; i < filecount; i++){
+            for(int i = 0; i < filecount; i++){
                 if (!strncmp(archive -> name, files[i], MAX(strlen(archive -> name), strlen(files[i])))){
                     if (lseek(fd, archive -> begin, SEEK_SET) == (off_t) (-1)){
                         RC_ERROR("Unable to seek file: %s", strerror(rc));
@@ -223,9 +223,9 @@ int tar_extract(const int fd, struct tar_t * archive, const size_t filecount, co
         // extract each entry
         while (archive){
             //if (!exist_duplicates_ahead(archive)){
-                if (extract_entry(fd, archive, verbosity) < 0){
-                    ret = -1;
-                }
+            if (extract_entry(fd, archive, verbosity) < 0){
+                ret = -1;
+            }
             //}
             archive = archive -> next;
         }
@@ -234,7 +234,7 @@ int tar_extract(const int fd, struct tar_t * archive, const size_t filecount, co
     return ret;
 }
 
-int tar_update(const int fd, struct tar_t ** archive, const size_t filecount, const char * files[], const char verbosity){
+int tar_update(const int fd, struct tar_t ** archive, const int filecount, const char * files[], const char verbosity){
     if (!filecount){
         return 0;
     }
@@ -267,16 +267,22 @@ int tar_update(const int fd, struct tar_t ** archive, const size_t filecount, co
         // if there is an older version, check its timestamp
         if (old){
 
-#if MY_LS_ENV == 'L'
-            current_value->tm = localtime(&current_stat->st_mtim.tv_sec);;
-            current_value->file_info = current_stat;
-            double rounded = lround(current_stat->st_mtim.tv_nsec/1.0e6);
-            current_value->milliseconds = current_stat->st_mtim.tv_sec*1000 + rounded;
+#if MY_TAR_ENV == 'L'
+            double rounded = lround(st.st_mtim.tv_nsec/1.0e6);
+            long long milliseconds = (st.st_mtim.tv_sec*1000 + rounded)/1000;
+            if (milliseconds > oct2uint(old -> mtime, 11)){
+                strncpy(new_file, files[i], strlen(files[i]));
+                V_PRINT(stdout, "%s", files[i]);
+                newer[currentNewer] = new_file;
+                currentNewer++;
+            }
 #else
             if (st.st_mtimespec.tv_sec > oct2uint(old -> mtime, 11)){
 
                 strncpy(new_file, files[i], strlen(files[i]));
                 V_PRINT(stdout, "%s", files[i]);
+                newer[currentNewer] = new_file;
+                currentNewer++;
             }
 #endif
 
@@ -286,13 +292,9 @@ int tar_update(const int fd, struct tar_t ** archive, const size_t filecount, co
         else{
             strncpy(new_file, files[i], strlen(files[i]));
             V_PRINT(stdout, "%s", files[i]);
-        }
-
-        if (new_file){
             newer[currentNewer] = new_file;
             currentNewer++;
         }
-
     }
 
 
@@ -302,7 +304,7 @@ int tar_update(const int fd, struct tar_t ** archive, const size_t filecount, co
         ERROR("Unable to update archive");
     }
 
-    // cleanup
+    // cleanuup
     for(int i = 0; i < currentNewer; i++){
         free(newer[i]);
     }
@@ -311,249 +313,18 @@ int tar_update(const int fd, struct tar_t ** archive, const size_t filecount, co
     return all?0:-1;
 }
 
-int tar_remove(const int fd, struct tar_t ** archive, const size_t filecount, const char * files[], const char verbosity){
-    if (fd < 0){
-        return -1;
-    }
-
-    // archive has to exist
-    if (!archive || !*archive){
-        ERROR("Got bad archive");
-    }
-
-    if (filecount && !files){
-        ERROR("Non-zero file count provided, but file list is NULL");
-    }
-
-    if (!filecount){
-        V_PRINT(stderr, "No entries specified");
-        return 0;
-    }
-
-    // get file permissions
-    struct stat st;
-    if (fstat(fd, &st)){
-        RC_ERROR("Unable to stat archive: %s", strerror(rc));
-    }
-
-    // reset offset of original file
-    if (lseek(fd, 0, SEEK_SET) == (off_t) (-1)){
-        RC_ERROR("Unable to seek file: %s", strerror(rc));
-    }
-
-    // find first file to be removed that does not exist
-    int ret = 0;
-    for(int i = 0; i < filecount; i++){
-        if (!exists(*archive, files[i], 0)){
-            ERROR("'%s' not found in archive", files[i]);
-        }
-    }
-
-    unsigned int read_offset = 0;
-    unsigned int write_offset = 0;
-    struct tar_t * prev = NULL;
-    struct tar_t * curr = *archive;
-    while(curr){
-        // get original size
-        int total = 512;
-
-        if ((curr -> type == REGULAR) || (curr -> type == NORMAL) || (curr -> type == CONTIGUOUS)){
-            total += oct2uint(curr -> size, 11);
-            if (total % 512){
-                total += 512 - (total % 512);
-            }
-        }
-
-        const int match = check_match(curr, filecount, files);
-
-        if (match < 0){
-            ERROR("Match failed");
-        }
-        else if (!match){
-            // if the old data is not in the right place, move it
-            if (write_offset < read_offset){
-                int got = 0;
-                while (got < total){
-                    // go to old data
-                    if (lseek(fd, read_offset, SEEK_SET) == (off_t) (-1)){
-                        RC_ERROR("Cannot seek: %s", strerror(rc));
-                    }
-
-                    char buf[512];
-
-                    // copy chunk out
-                    if (read_size(fd, buf, 512) != 512){// guarenteed 512 octets
-                        ERROR("Read error");
-                    }
-
-                    // go to new position
-                    if (lseek(fd, write_offset, SEEK_SET) == (off_t) (-1)){
-                        RC_ERROR("Cannot seek: %s", strerror(rc));
-                    }
-
-                    // write data in
-                    if (write_size(fd, buf, 512) != 512){
-                        RC_ERROR("Write error: %s", strerror(rc));
-                    }
-
-                    // increment offsets
-                    got += 512;
-                    read_offset += 512;
-                    write_offset += 512;
-                }
-            }
-            else{
-                read_offset += total;
-                write_offset += total;
-
-                // skip past data
-                if (lseek(fd, read_offset, SEEK_SET) == (off_t) (-1)){
-                    RC_ERROR("Cannot seek: %s", strerror(rc));
-                }
-            }
-            prev = curr;
-            curr = curr -> next;
-        }
-        else{// if name matches, skip the data
-            struct tar_t * tmp = curr;
-            if (!prev){
-                *archive = curr -> next;
-                if (*archive){
-                    (*archive) -> begin = 0;
-                }
-            }
-            else{
-                prev -> next = curr -> next;
-
-                if (prev -> next){
-                    prev -> next -> begin = curr -> begin;
-                }
-            }
-            curr = curr -> next;
-            free(tmp);
-
-            // next read starts after current entry
-            read_offset += total;
-        }
-    }
-
-    // resize file
-    if (ftruncate(fd, write_offset) < 0){
-        RC_ERROR("Could not truncate file: %s", strerror(rc));
-    }
-
-    // add end data
-    if (write_end_data(fd, write_offset, verbosity) < 0){
-        V_PRINT(stderr, "Error: Could not close file");
-    }
-
-    return ret;
-}
-
-int tar_diff(FILE * f, struct tar_t * archive, const char verbosity){
-    struct stat st;
-    while (archive){
-        V_PRINT(f, "%s", archive -> name);
-
-        // if not found, print error
-        if (lstat(archive -> name, &st)){
-            int rc = errno;
-            fprintf(f, "Could not ");
-            if (archive -> type == SYMLINK){
-                fprintf(f, "readlink");
-            }
-            else{
-                fprintf(f, "stat");
-            }
-            fprintf(f, " %s: %s", archive -> name, strerror(rc));
-        }
-        else{
-            if (st.st_mtime != oct2uint(archive -> mtime, 11)){
-                fprintf(f, "%s: Mod time differs", archive -> name);
-            }
-            if (st.st_size != oct2uint(archive -> size, 11)){
-                fprintf(f, "%s: Mod time differs", archive -> name);
-            }
-        }
-
-        archive = archive -> next;
-    }
-    return 0;
-}
-
-int print_entry_metadata(FILE * f, struct tar_t * entry){
-    if (!entry){
-        return -1;
-    }
-
-    time_t mtime = oct2uint(entry -> mtime, 12);
-    char mtime_str[32];
-    strftime(mtime_str, sizeof(mtime_str), "%c", localtime(&mtime));
-    fprintf(f, "File Name: %s\n", entry -> name);
-    fprintf(f, "File Mode: %s (%03o)\n", entry -> mode, oct2uint(entry -> mode, 8));
-    fprintf(f, "Owner UID: %s (%d)\n", entry -> uid, oct2uint(entry -> uid, 12));
-    fprintf(f, "Owner GID: %s (%d)\n", entry -> gid, oct2uint(entry -> gid, 12));
-    fprintf(f, "File Size: %s (%d)\n", entry -> size, oct2uint(entry -> size, 12));
-    fprintf(f, "Time     : %s (%s)\n", entry -> mtime, mtime_str);
-    fprintf(f, "Checksum : %s\n", entry -> check);
-    fprintf(f, "File Type: ");
-    switch (entry -> type){
-        case REGULAR: case NORMAL:
-            fprintf(f, "Normal File");
-            break;
-            case HARDLINK:
-                fprintf(f, "Hard Link");
-                break;
-                case SYMLINK:
-                    fprintf(f, "Symbolic Link");
-                    break;
-                    case CHAR:
-                        fprintf(f, "Character Special");
-                        break;
-                        case BLOCK:
-                            fprintf(f, "Block Special");
-                            break;
-                            case DIRECTORY:
-                                fprintf(f, "Directory");
-                                break;
-                                case FIFO:
-                                    fprintf(f, "FIFO");
-                                    break;
-                                    case CONTIGUOUS:
-                                        fprintf(f, "Contiguous File");
-                                        break;
-    }
-    fprintf(f, " (%c)\n", entry -> type?entry -> type:'0');
-    fprintf(f, "Link Name: %s\n", entry -> link_name);
-    fprintf(f, "Ustar\\000: %c%c%c%c%c\\%2x\\%2x\\%02x\n",   entry -> ustar[0], entry -> ustar[1], entry -> ustar[2], entry -> ustar[3], entry -> ustar[4], entry -> ustar[5], entry -> ustar[6], entry -> ustar[7]);
-    fprintf(f, "Username : %s\n", entry -> owner);
-    fprintf(f, "Group    : %s\n", entry -> group);
-    fprintf(f, "Major    : %s\n", entry -> major);
-    fprintf(f, "Minor    : %s\n", entry -> minor);
-    fprintf(f, "Prefix   : %s\n", entry -> prefix);
-    fprintf(f, "\n");
-
-    return 0;
-}
-
-int print_tar_metadata(FILE * f, struct tar_t * archive){
-    while (archive){
-        print_entry_metadata(f, archive);
-        archive = archive -> next;
-    }
-    return 0;
-}
-
 struct tar_t * exists(struct tar_t * archive, const char * filename, const char ori){
     while (archive){
-        if (ori){
-            if (!strncmp(archive -> block, filename, MAX(strlen(archive -> block), strlen(filename)) + 1)){
-                return archive;
+        if (!exist_duplicates_ahead(archive)){
+            if (ori){
+                if (!strncmp(archive -> block, filename, MAX(strlen(archive -> block), strlen(filename)) + 1)){
+                    return archive;
+                }
             }
-        }
-        else{
-            if (!strncmp(archive -> name, filename, MAX(strlen(archive -> name), strlen(filename)) + 1)){
-                return archive;
+            else{
+                if (!strncmp(archive -> name, filename, MAX(strlen(archive -> name), strlen(filename)) + 1)){
+                    return archive;
+                }
             }
         }
         archive = archive -> next;
@@ -575,8 +346,8 @@ int counting_slashs(const char* filename){
 int counting_files(const char** files){
     int count = 0;
     while(*files){
-            count++;
-            files++;
+        count++;
+        files++;
     }
     return count;
 }
@@ -617,9 +388,9 @@ int format_tar_data(struct tar_t * entry, const char * filename, const char verb
 
     // figure out filename type and fill in type-specific fields
     switch (st.st_mode & S_IFMT) {
-            case S_IFREG:
-                entry -> type = NORMAL;
-                break;
+        case S_IFREG:
+            entry -> type = NORMAL;
+            break;
             case S_IFLNK:
                 entry -> type = SYMLINK;
 
@@ -631,31 +402,31 @@ int format_tar_data(struct tar_t * entry, const char * filename, const char verb
                     RC_ERROR("Could not read link %s: %s", filename, strerror(rc));
                 }
                 break;
-            case S_IFCHR:
-                entry -> type = CHAR;
-                // get character device major and minor values
-                snprintf(entry -> major, sizeof(entry -> major), "%07o", major(st.st_rdev));
-                snprintf(entry -> minor, sizeof(entry -> minor), "%07o", minor(st.st_rdev));
-                break;
-            case S_IFBLK:
-                entry -> type = BLOCK;
-                // get block device major and minor values
-                snprintf(entry -> major, sizeof(entry -> major), "%07o", major(st.st_rdev));
-                snprintf(entry -> minor, sizeof(entry -> minor), "%07o", minor(st.st_rdev));
-                break;
-            case S_IFDIR:
-                memset(entry -> size, '0', 11);
-                entry -> type = DIRECTORY;
-                break;
-            case S_IFIFO:
-                entry -> type = FIFO;
-                break;
-            case S_IFSOCK:
-                entry -> type = -1;
-                ERROR("Error: Cannot tar socket");
-            default:
-                entry -> type = -1;
-                ERROR("Error: Unknown filetype");
+                case S_IFCHR:
+                    entry -> type = CHAR;
+                    // get character device major and minor values
+                    snprintf(entry -> major, sizeof(entry -> major), "%07o", major(st.st_rdev));
+                    snprintf(entry -> minor, sizeof(entry -> minor), "%07o", minor(st.st_rdev));
+                    break;
+                    case S_IFBLK:
+                        entry -> type = BLOCK;
+                        // get block device major and minor values
+                        snprintf(entry -> major, sizeof(entry -> major), "%07o", major(st.st_rdev));
+                        snprintf(entry -> minor, sizeof(entry -> minor), "%07o", minor(st.st_rdev));
+                        break;
+                        case S_IFDIR:
+                            memset(entry -> size, '0', 11);
+                            entry -> type = DIRECTORY;
+                            break;
+                            case S_IFIFO:
+                                entry -> type = FIFO;
+                                break;
+                                case S_IFSOCK:
+                                    entry -> type = -1;
+                                    ERROR("Error: Cannot tar socket");
+                                    default:
+                                        entry -> type = -1;
+                                        ERROR("Error: Unknown filetype");
     }
 
     // get username
@@ -698,7 +469,7 @@ unsigned int calculate_checksum(struct tar_t * entry){
     return check;
 }
 
-int ls_entry(FILE * f, struct tar_t * entry, const size_t filecount, const char * files[], const char verbosity){
+int ls_entry(FILE * f, struct tar_t * entry, const int filecount, const char * files[], const char verbosity){
     if (!verbosity){
         return 0;
     }
@@ -712,7 +483,7 @@ int ls_entry(FILE * f, struct tar_t * entry, const size_t filecount, const char 
     // if no files were specified, print everything
     char print = !filecount;
     // otherwise, search for matching names
-    for(size_t i = 0; i < filecount; i++){
+    for(int i = 0; i < filecount; i++){
         if (strncmp(entry -> name, files[i], MAX(strlen(entry -> name), strlen(files[i])))){
             print = 1;
             break;
@@ -797,7 +568,7 @@ int extract_entry(const int fd, struct tar_t * entry, const char verbosity){
         while (--len && (path[len] != '/'));
         path[len] = '\0';   // if nothing was found, path is terminated
 
-        if (recursive_mkdir(path, DEFAULT_DIR_MODE, verbosity) < 0){
+        if (recursive_mkdir(path, DEFAULT_DIR_MODE) < 0){
             V_PRINT(stderr, "Could not make directory %s", path);
             free(path);
             return -1;
@@ -819,7 +590,7 @@ int extract_entry(const int fd, struct tar_t * entry, const char verbosity){
 
         // copy data to file
         char buf[512];
-        int got = 0;
+        unsigned int got = 0;
         while (got < size){
             int r;
             if ((r = read_size(fd, buf, MIN(size - got, 512))) < 0){
@@ -843,7 +614,7 @@ int extract_entry(const int fd, struct tar_t * entry, const char verbosity){
     }
     else if (entry -> type == HARDLINK){
         if (link(entry -> link_name, entry -> name) < 0){
-                    EXIST_ERROR("Unable to create hardlink %s: %s", entry -> name, strerror(rc));
+            EXIST_ERROR("Unable to create hardlink %s: %s", entry -> name, strerror(rc));
         }
     }
     else if (entry -> type == SYMLINK){
@@ -862,7 +633,7 @@ int extract_entry(const int fd, struct tar_t * entry, const char verbosity){
         }
     }
     else if (entry -> type == DIRECTORY){
-        if (recursive_mkdir(entry -> name, oct2uint(entry -> mode, 7) & 0777, verbosity) < 0){
+        if (recursive_mkdir(entry -> name, oct2uint(entry -> mode, 7) & 0777) < 0){
             EXIST_ERROR("Unable to create directory %s: %s", entry -> name, strerror(rc));
         }
     }
@@ -874,7 +645,7 @@ int extract_entry(const int fd, struct tar_t * entry, const char verbosity){
     return 0;
 }
 
-int write_entries(const int fd, struct tar_t ** archive, struct tar_t ** head, const size_t filecount, const char * files[], int * offset, const char verbosity){
+int write_entries(const int fd, struct tar_t ** archive, struct tar_t ** head, const int filecount, const char * files[], int * offset, const char verbosity){
     if (fd < 0){
         ERROR("Bad file descriptor");
     }
@@ -889,7 +660,7 @@ int write_entries(const int fd, struct tar_t ** archive, struct tar_t ** head, c
 
     // add new data
     struct tar_t ** tar = archive;  // current entry
-    for(unsigned int i = 0; i < filecount; i++){
+    for(int i = 0; i < filecount; i++){
         *tar = malloc(sizeof(struct tar_t));
 
         // stat file
@@ -963,16 +734,16 @@ int write_entries(const int fd, struct tar_t ** archive, struct tar_t ** head, c
 
             //    // if file has already been included, modify the header
             //    if (tarred){
-                    // change type to hard link
-                    (*tar) -> type = REGULAR;
+            // change type to hard link
+            (*tar) -> type = REGULAR;
 
             //        // change link name to (*tar)red file name (both are the same)
             //        strncpy((*tar) -> link_name, (*tar) -> name, 100);
             //
-                    // change size to 0
+            // change size to 0
             //        memset((*tar) -> size, '0', sizeof((*tar) -> size) - 1);
 
-                    // recalculate checksum
+            // recalculate checksum
             //        calculate_checksum(*tar);
             //    }
             //}
@@ -985,20 +756,20 @@ int write_entries(const int fd, struct tar_t ** archive, struct tar_t ** head, c
             if (((*tar) -> type == REGULAR) || ((*tar) -> type == NORMAL) || ((*tar) -> type == CONTIGUOUS)){
                 // if the file isn't already in the tar file, copy the contents in
                 //Marcelif (!tarred){
-                    int f = open((*tar) -> name, O_RDONLY);
-                    if (f < 0){
-                        WRITE_ERROR("Could not open %s", files[i]);
-                    }
+                int f = open((*tar) -> name, O_RDONLY);
+                if (f < 0){
+                    WRITE_ERROR("Could not open %s", files[i]);
+                }
 
-                    int r = 0;
-                    char buf[512];
-                    while ((r = read_size(f, buf, 512)) > 0){
-                        if (write_size(fd, buf, r) != r){
-                            RC_ERROR("Could not write to archive: %s", strerror(rc));
-                        }
+                int r = 0;
+                char buf[512];
+                while ((r = read_size(f, buf, 512)) > 0){
+                    if (write_size(fd, buf, r) != r){
+                        RC_ERROR("Could not write to archive: %s", strerror(rc));
                     }
+                }
 
-                    close(f);
+                close(f);
                 //Marcel}
             }
 
@@ -1052,28 +823,6 @@ int write_end_data(const int fd, int size, const char verbosity){
     return pad;
 }
 
-int check_match(struct tar_t * entry, const size_t filecount, const char * files[]){
-    if (!entry){
-        return -1;
-    }
-
-    if (!filecount){
-        return 0;
-    }
-
-    if (filecount && !files){
-        return -1;
-    }
-
-    for(size_t i = 0; i < filecount; i++){
-        if (!strncmp(entry -> name, files[i], MAX(strlen(entry -> name), strlen(files[i])) + 1)){
-            return i + 1;
-        }
-    }
-
-    return 0;
-}
-
 int read_size(int fd, char * buf, int size){
     int got = 0, rc;
     while ((got < size) && ((rc = read(fd, buf + got, size - got)) > 0)){
@@ -1092,7 +841,7 @@ int write_size(int fd, char * buf, int size){
 
 unsigned int oct2uint(char * oct, unsigned int size){
     unsigned int out = 0;
-    int i = 0;
+    unsigned int i = 0;
     while ((i < size) && oct[i]){
         out = (out << 3) | (unsigned int) (oct[i++] - '0');
     }
@@ -1108,7 +857,7 @@ int iszeroed(char * buf, size_t size){
     return 1;
 }
 
-int recursive_mkdir(const char * dir, const unsigned int mode, const char verbosity){
+int recursive_mkdir(const char * dir, const unsigned int mode){
     int rc = 0;
     const size_t len = strlen(dir);
 
