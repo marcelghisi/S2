@@ -201,6 +201,54 @@ my_token.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_bc_py.dir/build.make CMakeFiles/my_bc_py.dir/my_token.c.s
 .PHONY : my_token.c.s
 
+nodes.o: nodes.c.o
+.PHONY : nodes.o
+
+# target to build an object file
+nodes.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_bc_py.dir/build.make CMakeFiles/my_bc_py.dir/nodes.c.o
+.PHONY : nodes.c.o
+
+nodes.i: nodes.c.i
+.PHONY : nodes.i
+
+# target to preprocess a source file
+nodes.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_bc_py.dir/build.make CMakeFiles/my_bc_py.dir/nodes.c.i
+.PHONY : nodes.c.i
+
+nodes.s: nodes.c.s
+.PHONY : nodes.s
+
+# target to generate assembly for a file
+nodes.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_bc_py.dir/build.make CMakeFiles/my_bc_py.dir/nodes.c.s
+.PHONY : nodes.c.s
+
+parser.o: parser.c.o
+.PHONY : parser.o
+
+# target to build an object file
+parser.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_bc_py.dir/build.make CMakeFiles/my_bc_py.dir/parser.c.o
+.PHONY : parser.c.o
+
+parser.i: parser.c.i
+.PHONY : parser.i
+
+# target to preprocess a source file
+parser.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_bc_py.dir/build.make CMakeFiles/my_bc_py.dir/parser.c.i
+.PHONY : parser.c.i
+
+parser.s: parser.c.s
+.PHONY : parser.s
+
+# target to generate assembly for a file
+parser.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_bc_py.dir/build.make CMakeFiles/my_bc_py.dir/parser.c.s
+.PHONY : parser.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -219,6 +267,12 @@ help:
 	@echo "... my_token.o"
 	@echo "... my_token.i"
 	@echo "... my_token.s"
+	@echo "... nodes.o"
+	@echo "... nodes.i"
+	@echo "... nodes.s"
+	@echo "... parser.o"
+	@echo "... parser.i"
+	@echo "... parser.s"
 .PHONY : help
 
 

@@ -13,6 +13,8 @@ my_token.h
 /Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_token.h
 my_lexer.h
 /Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_lexer.h
+parser.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/parser.h
 
 /Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_lexer.h
 my_token.h
@@ -21,4 +23,12 @@ my_token.h
 /Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_token.h
 stdio.h
 -
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/nodes.h
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/parser.h
+my_token.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_token.h
+nodes.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/nodes.h
 

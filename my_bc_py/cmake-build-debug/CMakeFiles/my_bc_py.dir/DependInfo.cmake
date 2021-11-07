@@ -11,6 +11,8 @@ set(CMAKE_DEPENDS_CHECK_C
   "/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/main.c" "/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/CMakeFiles/my_bc_py.dir/main.c.o"
   "/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_lexer.c" "/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/CMakeFiles/my_bc_py.dir/my_lexer.c.o"
   "/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_token.c" "/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/CMakeFiles/my_bc_py.dir/my_token.c.o"
+  "/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/nodes.c" "/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/CMakeFiles/my_bc_py.dir/nodes.c.o"
+  "/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/parser.c" "/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/cmake-build-debug/CMakeFiles/my_bc_py.dir/parser.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")
 

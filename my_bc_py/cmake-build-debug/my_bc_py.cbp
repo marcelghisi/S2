@@ -93,6 +93,18 @@
 		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_token.h">
 			<Option target="my_bc_py"/>
 		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/nodes.c">
+			<Option target="my_bc_py"/>
+		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/nodes.h">
+			<Option target="my_bc_py"/>
+		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/parser.c">
+			<Option target="my_bc_py"/>
+		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/parser.h">
+			<Option target="my_bc_py"/>
+		</Unit>
 		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

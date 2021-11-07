@@ -2,6 +2,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/my_bc_py.dir/main.c.o"
   "CMakeFiles/my_bc_py.dir/my_lexer.c.o"
   "CMakeFiles/my_bc_py.dir/my_token.c.o"
+  "CMakeFiles/my_bc_py.dir/nodes.c.o"
+  "CMakeFiles/my_bc_py.dir/parser.c.o"
   "my_bc_py"
   "my_bc_py.pdb"
 )
