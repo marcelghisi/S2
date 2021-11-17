@@ -18,7 +18,7 @@ void Parser_ctor(Parser* me,Token* tokens);
 void Parser_next(Parser* me);
 
 // Parse and get the result
-int Parser_parse(Parser* me);
+int Parser_parse(Parser* me, char* error);
 
 
 #endif //MY_BC_PY_PARSER_H

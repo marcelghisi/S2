@@ -87,6 +87,12 @@
 		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_lexer.h">
 			<Option target="my_bc_py"/>
 		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_readline.c">
+			<Option target="my_bc_py"/>
+		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_readline.h">
+			<Option target="my_bc_py"/>
+		</Unit>
 		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/my_token.c">
 			<Option target="my_bc_py"/>
 		</Unit>
@@ -103,6 +109,12 @@
 			<Option target="my_bc_py"/>
 		</Unit>
 		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/parser.h">
+			<Option target="my_bc_py"/>
+		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/utils.c">
+			<Option target="my_bc_py"/>
+		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/utils.h">
 			<Option target="my_bc_py"/>
 		</Unit>
 		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_bc_py/CMakeLists.txt">

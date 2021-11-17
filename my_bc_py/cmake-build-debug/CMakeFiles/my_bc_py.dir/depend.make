@@ -4,13 +4,18 @@
 CMakeFiles/my_bc_py.dir/main.c.o: \
  ../main.c \
  ../my_lexer.h \
+ ../my_readline.h \
  ../my_token.h \
  ../nodes.h \
- ../parser.h
+ ../parser.h \
+ ../utils.h
 CMakeFiles/my_bc_py.dir/my_lexer.c.o: \
  ../my_lexer.c \
  ../my_lexer.h \
  ../my_token.h
+CMakeFiles/my_bc_py.dir/my_readline.c.o: \
+ ../my_readline.c \
+ ../my_readline.h
 CMakeFiles/my_bc_py.dir/my_token.c.o: \
  ../my_token.c \
  ../my_token.h
@@ -22,3 +27,6 @@ CMakeFiles/my_bc_py.dir/parser.c.o: \
  ../nodes.h \
  ../parser.c \
  ../parser.h
+CMakeFiles/my_bc_py.dir/utils.c.o: \
+ ../utils.c \
+ ../utils.h

@@ -5,6 +5,7 @@
 #include "parser.h"
 #include "my_token.h"
 #include <stdlib.h>
+#include <string.h>
 
 int expr(Parser* me);
 
@@ -53,13 +54,13 @@ int term(Parser* me){
     {
         if (me->current_token->type == MULTIPLY){
             Parser_next(me);
-            result = MultipliedNode_ctor(result,me->current_token->value)->result;
+            result = MultipliedNode_ctor(result, factor(me))->result;
         } else if (me->current_token->type == DIVIDE){
             Parser_next(me);
-            result = DividedNode_ctor(result,me->current_token->value)->result;
+            result = DividedNode_ctor(result, factor(me))->result;
         } else if (me->current_token->type == MODULE){
             Parser_next(me);
-            result = ModuleNode_ctor(result,me->current_token->value)->result;
+            result = ModuleNode_ctor(result,factor(me))->result;
         }
     }
     return result;
@@ -72,16 +73,20 @@ int expr(Parser* me){
     {
         if (me->current_token->type == PLUS){
             Parser_next(me);
-            result = AddedNode_ctor(result,me->current_token->value)->result;
+            result = AddedNode_ctor(result, term(me))->result;
         } else if (me->current_token->type == MINUS){
             Parser_next(me);
-            result = SubtractedNode_ctor(result,me->current_token->value)->result;
+            result = SubtractedNode_ctor(result, term(me))->result;
         }
     }
     return result;
 }
 
-int Parser_parse(Parser* me){
+int Parser_parse(Parser* me, char* error){
     int result = expr(me);
+    if (me->current_token != NULL || me->tokens == NULL){
+        strcat(error,"parsing error");
+        return NULL;
+    }
     return result;
 }
