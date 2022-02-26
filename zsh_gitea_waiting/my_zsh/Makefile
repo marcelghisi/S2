@@ -1,0 +1,31 @@
+TARGET:my_zsh
+ 
+my_bc: my_zsh.o my_libzsh.a
+	gcc my_zsh.o -o my_zsh -L . -Wall -Wno-unused-parameter -Wextra -Werror -g3 -fsanitize=address  -static-libsan my_libzsh.a -lm
+ 
+my_zsh.o: my_zsh.c
+	gcc -c -Wall -Wextra -Werror -Wno-unused-parameter -g3 -fsanitize=address  -static-libsan my_zsh.c -o my_zsh.o
+ 
+my_libzsh.a:my_split.o utils.o  utils.o parser.o nodes.o my_token.o my_readline.o my_lexer.o
+	ar rs my_libzsh.a my_split.o utils.o parser.o nodes.o my_token.o my_readline.o my_lexer.o
+ 
+utils.o: utils.c
+	gcc -c -I utils -Wall -Wextra -Wno-unused-parameter -Werror -g3 -fsanitize=address  -static-libsan utils.c -o utils.o
+ 
+parser.o: parser.c
+	gcc -c -I parser -Wall -Wextra -Wno-unused-parameter -Werror -g3 -fsanitize=address  -static-libsan parser.c -o parser.o
+
+ my_split.o: my_split.c
+	gcc -c -I my_split -Wall -Wextra -Wno-unused-parameter -Werror -g3 -fsanitize=address  -static-libsan my_split.c -o my_split.o
+
+nodes.o: nodes.c
+	gcc -c -I nodes -Wall -Wextra -Wno-unused-parameter -Werror -g3 -fsanitize=address  -static-libsan nodes.c -o nodes.o
+ 
+my_token.o: my_token.c
+	gcc -c -I my_token -Wall -Wextra -Wno-unused-parameter -Werror -g3 -fsanitize=address  -static-libsan my_token.c -o my_token.o
+ 
+my_readline.o: my_readline.c
+	gcc -c -I my_readline -Wall -Wextra -Wno-unused-parameter -Werror -g3 -fsanitize=address  -static-libsan my_readline.c -o my_readline.o
+ 
+my_lexer.o: my_lexer.c
+	gcc -c -I my_lexer -Wall -Wextra -Wno-unused-parameter -Werror -g3 -fsanitize=address -static-libsan my_lexer.c -o my_lexer.o

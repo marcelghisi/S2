@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_zsh/main.c
+stdio.h
+-
+stdlib.h
+-
+errno.h
+-
+string.h
+-
+shell.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_zsh/shell.h
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_zsh/prompt.c
+stdio.h
+-
+stdlib.h
+-
+errno.h
+-
+string.h
+-
+shell.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_zsh/shell.h
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_zsh/shell.h
+

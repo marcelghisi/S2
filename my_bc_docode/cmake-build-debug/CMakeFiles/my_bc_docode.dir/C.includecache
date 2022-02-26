@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_docode/my_token.h
+stdio.h
+-
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_docode/nodes.h
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_docode/parser.c
+parser.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_docode/parser.h
+my_token.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_docode/my_token.h
+stdlib.h
+-
+string.h
+-
+
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_docode/parser.h
+my_token.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_docode/my_token.h
+nodes.h
+/Users/marcel.ghisi/Projects/ELU/S2/my_bc_docode/nodes.h
+
