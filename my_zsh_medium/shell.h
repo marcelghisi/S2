@@ -1,6 +1,7 @@
 //
 // Created by Marcel Ghisi on 06/02/22.
 //
+#include "nodes.h"
 
 #ifndef MY_ZSH_MEDIUM_SHELL_H
 #define MY_ZSH_MEDIUM_SHELL_H
@@ -16,19 +17,21 @@ char* read_cmd(int fd);
 void initsh(void);
 
 /* shell builtin utilities */
-int dump(char *argument);
+int dump(struct node_s *root);
 
-int set_environment(char *argument);
+int set_environment(struct node_s *root);
 
-int unset_environment(char *argument);
+int unset_environment(struct node_s *root);
 
-int my_exit(char *argument);
+int change_dir(struct node_s *root);
+
+int my_exit(struct node_s *root);
 
 /* struct for builtin utilities */
 struct builtin_s
 {
     char *name;    /* utility name */
-    int (*func)(char *argument); /* function to call to execute the utility */
+    int (*func)(struct node_s *root); /* function to call to execute the utility */
 };
 
 /* the list of builtin utilities */

@@ -100,7 +100,9 @@ void free_node_tree(struct node_s *node)
     while(child)
     {
         struct node_s *next = child->next_sibling;
-        free_node_tree(child);
+        if (next != NULL){
+            free_node_tree(child);
+        }
         child = next;
     }
 

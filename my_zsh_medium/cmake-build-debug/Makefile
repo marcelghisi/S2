@@ -153,6 +153,30 @@ builtins/builtins.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_zsh_medium.dir/build.make CMakeFiles/my_zsh_medium.dir/builtins/builtins.c.s
 .PHONY : builtins/builtins.c.s
 
+builtins/cd.o: builtins/cd.c.o
+.PHONY : builtins/cd.o
+
+# target to build an object file
+builtins/cd.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_zsh_medium.dir/build.make CMakeFiles/my_zsh_medium.dir/builtins/cd.c.o
+.PHONY : builtins/cd.c.o
+
+builtins/cd.i: builtins/cd.c.i
+.PHONY : builtins/cd.i
+
+# target to preprocess a source file
+builtins/cd.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_zsh_medium.dir/build.make CMakeFiles/my_zsh_medium.dir/builtins/cd.c.i
+.PHONY : builtins/cd.c.i
+
+builtins/cd.s: builtins/cd.c.s
+.PHONY : builtins/cd.s
+
+# target to generate assembly for a file
+builtins/cd.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_zsh_medium.dir/build.make CMakeFiles/my_zsh_medium.dir/builtins/cd.c.s
+.PHONY : builtins/cd.c.s
+
 builtins/dump.o: builtins/dump.c.o
 .PHONY : builtins/dump.o
 
@@ -597,6 +621,9 @@ help:
 	@echo "... builtins/builtins.o"
 	@echo "... builtins/builtins.i"
 	@echo "... builtins/builtins.s"
+	@echo "... builtins/cd.o"
+	@echo "... builtins/cd.i"
+	@echo "... builtins/cd.s"
 	@echo "... builtins/dump.o"
 	@echo "... builtins/dump.i"
 	@echo "... builtins/dump.s"

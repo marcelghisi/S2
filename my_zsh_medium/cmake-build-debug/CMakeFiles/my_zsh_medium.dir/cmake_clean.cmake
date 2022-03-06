@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/my_zsh_medium.dir/builtins/builtins.c.o"
+  "CMakeFiles/my_zsh_medium.dir/builtins/cd.c.o"
   "CMakeFiles/my_zsh_medium.dir/builtins/dump.c.o"
   "CMakeFiles/my_zsh_medium.dir/builtins/exit.c.o"
   "CMakeFiles/my_zsh_medium.dir/builtins/setenv.c.o"

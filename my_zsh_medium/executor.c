@@ -334,12 +334,8 @@ int Executor_execute_builtin(Executor* me){
     {
         if(strcmp(child->val.str, builtins[i].name) == 0)
         {
+            builtins[i].func(me->command->first_child);
             child = child->next_sibling;
-            while(child)
-            {
-                builtins[i].func(child->val.str);
-                child = child->next_sibling;
-            }
             return 1;
         }
     }

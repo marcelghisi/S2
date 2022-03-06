@@ -3,6 +3,14 @@
 
 CMakeFiles/my_zsh_medium.dir/builtins/builtins.c.o: \
  ../builtins/builtins.c \
+ ../nodes.h \
+ ../shell.h
+CMakeFiles/my_zsh_medium.dir/builtins/cd.c.o: \
+ ../builtins/cd.c \
+ ../my_split.h \
+ ../my_token.h \
+ ../nodes.h \
+ ../parser.h \
  ../shell.h
 CMakeFiles/my_zsh_medium.dir/builtins/dump.c.o: \
  ../builtins/dump.c \
@@ -56,6 +64,7 @@ CMakeFiles/my_zsh_medium.dir/my_lexer.c.o: \
  ../source.h
 CMakeFiles/my_zsh_medium.dir/my_readline.c.o: \
  ../my_readline.c \
+ ../nodes.h \
  ../shell.h \
  ../utils.h
 CMakeFiles/my_zsh_medium.dir/my_split.c.o: \
@@ -64,6 +73,7 @@ CMakeFiles/my_zsh_medium.dir/my_split.c.o: \
 CMakeFiles/my_zsh_medium.dir/my_token.c.o: \
  ../my_token.c \
  ../my_token.h \
+ ../nodes.h \
  ../scanner.h \
  ../shell.h \
  ../source.h
@@ -86,11 +96,13 @@ CMakeFiles/my_zsh_medium.dir/prompt.c.o: \
  ../shell.h \
  ../symtab.h
 CMakeFiles/my_zsh_medium.dir/scanner.c.o: \
+ ../nodes.h \
  ../scanner.c \
  ../scanner.h \
  ../shell.h \
  ../source.h
 CMakeFiles/my_zsh_medium.dir/source.c.o: \
+ ../nodes.h \
  ../shell.h \
  ../source.c \
  ../source.h

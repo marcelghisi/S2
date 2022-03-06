@@ -81,6 +81,9 @@
 		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/builtins/builtins.c">
 			<Option target="my_zsh_medium"/>
 		</Unit>
+		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/builtins/cd.c">
+			<Option target="my_zsh_medium"/>
+		</Unit>
 		<Unit filename="/Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/builtins/dump.c">
 			<Option target="my_zsh_medium"/>
 		</Unit>

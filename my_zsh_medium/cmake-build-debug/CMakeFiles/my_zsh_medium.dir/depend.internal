@@ -3,6 +3,14 @@
 
 CMakeFiles/my_zsh_medium.dir/builtins/builtins.c.o
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/builtins/builtins.c
+ /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/nodes.h
+ /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/shell.h
+CMakeFiles/my_zsh_medium.dir/builtins/cd.c.o
+ /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/builtins/cd.c
+ /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/my_split.h
+ /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/my_token.h
+ /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/nodes.h
+ /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/parser.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/shell.h
 CMakeFiles/my_zsh_medium.dir/builtins/dump.c.o
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/builtins/dump.c
@@ -56,6 +64,7 @@ CMakeFiles/my_zsh_medium.dir/my_lexer.c.o
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/source.h
 CMakeFiles/my_zsh_medium.dir/my_readline.c.o
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/my_readline.c
+ /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/nodes.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/shell.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/utils.h
 CMakeFiles/my_zsh_medium.dir/my_split.c.o
@@ -64,6 +73,7 @@ CMakeFiles/my_zsh_medium.dir/my_split.c.o
 CMakeFiles/my_zsh_medium.dir/my_token.c.o
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/my_token.c
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/my_token.h
+ /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/nodes.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/scanner.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/shell.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/source.h
@@ -86,11 +96,13 @@ CMakeFiles/my_zsh_medium.dir/prompt.c.o
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/shell.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/symtab.h
 CMakeFiles/my_zsh_medium.dir/scanner.c.o
+ /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/nodes.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/scanner.c
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/scanner.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/shell.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/source.h
 CMakeFiles/my_zsh_medium.dir/source.c.o
+ /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/nodes.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/shell.h
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/source.c
  /Users/marcel.ghisi/Projects/ELU/S2/my_zsh_medium/source.h

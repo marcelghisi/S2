@@ -4,8 +4,9 @@
 
 #include "../shell.h"
 #include "../symtab.h"
+#include "../nodes.h"
 
-int dump(char *argument)
+int dump(struct node_s *root)
 {
     dump_local_symtab();
     return 0;

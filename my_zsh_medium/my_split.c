@@ -74,3 +74,13 @@ string_array* my_split(char* param_1, char* param_2)
     str->array = words;
     return str;
 }
+
+string_array* split_linked(char* param_1, char* param_2)
+{
+    int size = count_items(param_1,*param_2)+1;
+    char** words = create_words(param_1,*param_2,size);
+    string_array* str = (string_array*)malloc(sizeof(string_array));
+    str->size = size-1;
+    str->array = words;
+    return str;
+}

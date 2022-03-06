@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int my_exit(char *argument)
+int my_exit(struct node_s *root)
 {
     exit(0);
 }

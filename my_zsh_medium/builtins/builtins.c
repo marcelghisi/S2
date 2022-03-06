@@ -10,6 +10,7 @@ struct builtin_s builtins[] =
         { "exit"    , my_exit       },
         { "setenv"    , set_environment       },
         { "unsetenv"    , unset_environment },
+        { "cd"    , change_dir },
 
 };
 
